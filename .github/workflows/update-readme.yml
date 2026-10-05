@@ -1,0 +1,79 @@
+name: Update README activity
+
+on:
+  schedule:
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: readme-activity
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.REPO_TOKEN }}
+
+      - name: Refresh activity section
+        env:
+          TOKEN: ${{ secrets.REPO_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          python3 - << 'PY'
+          import json, os, urllib.request
+          from datetime import datetime
+
+          token = os.environ["TOKEN"]
+          repo = os.environ["REPO"]
+          req = urllib.request.Request(
+              f"https://api.github.com/repos/{repo}/commits?per_page=5",
+              headers={
+                  "Authorization": f"Bearer {token}",
+                  "Accept": "application/vnd.github+json",
+                  "X-GitHub-Api-Version": "2022-11-28",
+                  "User-Agent": "readme-activity-bot",
+              },
+          )
+          with urllib.request.urlopen(req) as resp:
+              commits = json.load(resp)
+
+          lines = []
+          for c in commits:
+              sha = c["sha"][:7]
+              date = c["commit"]["author"]["date"][:10]
+              msg = c["commit"]["message"].splitlines()[0]
+              author = c["commit"]["author"]["name"]
+              lines.append(f"- `{sha}` {date} — {msg} ({author})")
+          if not lines:
+              lines = ["_No commits found._"]
+          block = "\n".join(lines) + "\n"
+
+          path = "README.md"
+          text = open(path, encoding="utf-8").read()
+          start, end = "<!-- ACTIVITY:START -->", "<!-- ACTIVITY:END -->"
+          if start not in text or end not in text:
+              raise SystemExit("README markers missing")
+          pre, rest = text.split(start, 1)
+          _, post = rest.split(end, 1)
+          updated = f"{pre}{start}\n{block}{end}{post}"
+          open(path, "w", encoding="utf-8").write(updated)
+          print(f"Wrote {len(lines)} commit line(s)")
+          PY
+
+      - name: Commit if changed
+        run: |
+          set -euo pipefail
+          git diff --quiet README.md && echo "No changes" && exit 0
+          git config user.name "readme-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          git commit -m "chore: refresh README activity section"
+          git push
