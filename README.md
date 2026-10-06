@@ -1,6 +1,7 @@
 # dev-ops-A3
 ## Recent activity
 
+![Update README activity](https://github.com/wi24b141/dev-ops-A3/actions/workflows/update-readme.yml/badge.svg)
 <!-- ACTIVITY:START -->
 - `bd9b4db` 2026-10-05 — Merge pull request #4 from wi24b141/01-update-readme-activity (Mario Lagger)
 - `7556774` 2026-10-05 — Add workflow to update README activity section (Mario Lagger)
