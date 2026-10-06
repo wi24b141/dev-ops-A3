@@ -3,9 +3,9 @@
 
 ![Update README activity](https://github.com/wi24b141/dev-ops-A3/actions/workflows/update-readme.yml/badge.svg)
 <!-- ACTIVITY:START -->
-- `bd9b4db` 2026-10-05 — Merge pull request #4 from wi24b141/01-update-readme-activity (Mario Lagger)
-- `7556774` 2026-10-05 — Add workflow to update README activity section (Mario Lagger)
-- `0bf0528` 2026-10-05 — Merge pull request #3 from wi24b141/01-update-readme-activity (Mario Lagger)
-- `ed6fdb1` 2026-10-05 — Merge pull request #2 from wi24b141/main (Mario Lagger)
-- `e84ea2d` 2026-10-05 — Add recent activity section to README (Mario Lagger)
+- `0f72ef8` 2026-10-06 — Merge pull request #7 from wi24b141/01-update-readme-activity (Mario Lagger)
+- `297517c` 2026-10-06 — Add activity badge to README (Mario Lagger)
+- `8d797a6` 2026-10-06 — Merge pull request #5 from wi24b141/01-update-readme-activity (Mario Lagger)
+- `a25f1f5` 2026-10-06 — Add workflow to check README activity markers (Mario Lagger)
+- `d03c447` 2026-10-05 — chore: refresh README activity section (readme-bot)
 <!-- ACTIVITY:END -->
